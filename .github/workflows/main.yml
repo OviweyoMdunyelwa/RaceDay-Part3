@@ -1,0 +1,40 @@
+name: RaceDay CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Locate RaceDay solution
+        run: |
+          SOLUTION=$(find . -name "RaceDay.sln" -print -quit)
+          if [ -z "$SOLUTION" ]; then
+            echo "RaceDay.sln was not found."
+            exit 1
+          fi
+          echo "SOLUTION=$SOLUTION" >> $GITHUB_ENV
+          echo "Found solution: $SOLUTION"
+
+      - name: Restore solution
+        run: dotnet restore "$SOLUTION"
+
+      - name: Build entire solution
+        run: dotnet build "$SOLUTION" --configuration Release --no-restore
+
+      - name: Run API tests
+        run: dotnet test "$SOLUTION" --configuration Release --no-build --logger "console;verbosity=normal"
