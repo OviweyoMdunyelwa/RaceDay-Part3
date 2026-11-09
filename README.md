@@ -37,3 +37,8 @@ The repository contains the RaceDay.API project, which provides the backend serv
 ## Conclusion
 
 RaceDay demonstrates the development of a database-driven event management system across database implementation, API development and MVC application development. The project brings these components together to provide a platform for managing sporting events and supporting participant registration and event administration.
+
+
+
+<img width="1366" height="768" alt="Screenshot 2026-11-09 205407" src="https://github.com/user-attachments/assets/eb40a754-9fc2-42f1-a5f0-0a702708fbd9" />
+
