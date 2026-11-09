@@ -1,0 +1,58 @@
+﻿@model RaceDay.MVC.Models.EventDetailsVm
+@{
+    ViewData["Title"] = Model.Event.EventName;
+}
+
+<a asp-action="Index" class="btn btn-link ps-0">← Back to events</a>
+
+<div class="card mb-4">
+    <partial name="_EventBanner" model="Model.Event" />
+    <div class="card-body">
+        <h1>@Model.Event.EventName</h1>
+        <p class="text-muted">@Model.Event.EventType · @Model.Event.DistanceKM.ToString("0.##") km</p>
+        <p>@Model.Event.Description</p>
+        <ul class="list-unstyled mb-0">
+            <li>📍 <strong>Where:</strong> @Model.Event.Location</li>
+            <li>📅 <strong>When:</strong> @Model.Event.EventDate.ToString("dddd, dd MMMM yyyy")</li>
+            <li>⏰ <strong>Register by:</strong> @Model.Event.RegistrationDeadline.ToString("dd MMM yyyy")</li>
+        </ul>
+    </div>
+</div>
+
+<h2 class="h4">Choose a category</h2>
+
+@if (Model.AlreadyEnrolled)
+{
+    <div class="alert alert-success">
+        You have already entered this event.
+        <a asp-action="MyEvents">See My Enrolments</a>
+    </div>
+}
+else if (!Model.Categories.Any())
+{
+    <div class="alert alert-warning">This event has no categories yet. Please check back later.</div>
+}
+else
+{
+    <form asp-action="EnterEvent" method="post">
+        <input type="hidden" name="eventId" value="@Model.Event.EventID" />
+
+        <div class="list-group mb-3">
+            @foreach (var c in Model.Categories)
+            {
+                <label class="list-group-item d-flex align-items-start gap-3">
+                    <input class="form-check-input mt-1" type="radio" name="categoryId" value="@c.CategoryID" />
+                    <span class="flex-grow-1">
+                        <strong>@c.CategoryName</strong>
+                        <span class="text-muted"> · @c.DistanceKM.ToString("0.##") km @(string.IsNullOrWhiteSpace(c.AgeGroup) ? "" : "· " + c.AgeGroup)</span>
+                        <br />
+                        <small class="text-muted">@c.Description</small>
+                    </span>
+                    <span class="badge bg-dark align-self-center">R @c.EntryFee.ToString("N2")</span>
+                </label>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-lg">Enter event</button>
+    </form>
+}

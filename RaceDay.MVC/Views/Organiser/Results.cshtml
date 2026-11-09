@@ -1,0 +1,98 @@
+﻿@using RaceDay.MVC.Models
+@model RaceDay.MVC.Models.ResultsPageVm
+@{
+    ViewData["Title"] = "Results";
+}
+
+@functions {
+    static string Time(TimeSpan? t) => t.HasValue ? t.Value.ToString(@"hh\:mm\:ss") : "-";
+    static string Pos(int? p) => p.HasValue ? p.Value.ToString() : "-";
+}
+
+<h1 class="mb-4">Results</h1>
+
+<h2 class="h4">Recorded results</h2>
+@if (!Model.Rows.Any())
+{
+    <div class="alert alert-info">No results have been entered yet.</div>
+}
+else
+{
+    <div class="table-responsive mb-5">
+        <table class="table align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th>Participant</th>
+                    <th>Event</th>
+                    <th>Time</th>
+                    <th>Position</th>
+                    <th>Cat. pos.</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    bool published = row.Result.Status == ResultStatuses.Published;
+                    <tr>
+                        <td>@row.Enrolment?.ParticipantName</td>
+                        <td>@row.Enrolment?.EventName</td>
+                        <td>@Time(row.Result.FinishTime)</td>
+                        <td>@Pos(row.Result.PositionOverall)</td>
+                        <td>@Pos(row.Result.PositionCategory)</td>
+                        <td>
+                            <span class="badge @(published ? "status-confirmed" : "status-pending")">
+                                @(published ? "Published" : "Draft")
+                            </span>
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <form asp-action="SetResultStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@row.Result.ResultID" />
+                                <input type="hidden" name="status" value="@(published? ResultStatuses.Draft: ResultStatuses.Published)" />
+                                <button type="submit" class="btn btn-sm @(published ? "btn-outline-secondary" : "btn-accent")">
+                                    @(published ? "Unpublish" : "Publish")
+                                </button>
+                            </form>
+                            <a asp-action="CaptureResult" asp-route-enrolmentId="@row.Result.EnrolmentID" class="btn btn-sm btn-raceday">Edit</a>
+                            <form asp-action="DeleteResult" asp-route-id="@row.Result.ResultID" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete this result?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<h2 class="h4">Waiting for a result</h2>
+@if (!Model.AwaitingResult.Any())
+{
+    <div class="alert alert-light border">Every enrolled participant has a result.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle bg-white">
+            <thead class="table-light">
+                <tr><th>Race no.</th><th>Participant</th><th>Event</th><th>Category</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.AwaitingResult)
+                {
+                    <tr>
+                        <td>@e.RaceNumber</td>
+                        <td>@e.ParticipantName</td>
+                        <td>@e.EventName</td>
+                        <td>@e.CategoryName</td>
+                        <td class="text-end">
+                            <a asp-action="CaptureResult" asp-route-enrolmentId="@e.EnrolmentID" class="btn btn-sm btn-accent">Enter result</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

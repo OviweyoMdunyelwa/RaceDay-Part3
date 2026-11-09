@@ -1,0 +1,102 @@
+﻿@model RaceDay.MVC.Models.CategoriesPageVm
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1 class="mb-3">Categories</h1>
+
+@if (!Model.Events.Any())
+{
+    <div class="alert alert-info">
+        Create an event first, then you can add categories to it.
+        <a asp-action="CreateEvent">Create an event</a>
+    </div>
+}
+else
+{
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-6">
+            <select name="eventId" class="form-select" onchange="this.form.submit()">
+                @foreach (var e in Model.Events)
+                {
+                    <option value="@e.EventID" selected="@(Model.SelectedEvent?.EventID == e.EventID)">
+                        @e.EventName (@e.EventDate.ToString("dd MMM yyyy"))
+                    </option>
+                }
+            </select>
+        </div>
+    </form>
+
+    @if (!Model.Categories.Any())
+    {
+        <div class="alert alert-warning">This event has no categories yet. Add one below.</div>
+    }
+    else
+    {
+        <div class="table-responsive mb-4">
+            <table class="table align-middle bg-white">
+                <thead class="table-light">
+                    <tr><th>Name</th><th>Distance</th><th>Fee</th><th>Age group</th><th>Description</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <tr>
+                            <td><strong>@c.CategoryName</strong></td>
+                            <td>@c.DistanceKM.ToString("0.##") km</td>
+                            <td>R @c.EntryFee.ToString("N2")</td>
+                            <td>@c.AgeGroup</td>
+                            <td>@c.Description</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="EditCategory" asp-route-id="@c.CategoryID" class="btn btn-sm btn-raceday">Edit</a>
+                                <form asp-action="DeleteCategory" method="post" class="d-inline"
+                                      onsubmit="return confirm('Delete this category?');">
+                                    <input type="hidden" name="id" value="@c.CategoryID" />
+                                    <input type="hidden" name="eventId" value="@c.EventID" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Add a category to @Model.SelectedEvent?.EventName</h2>
+
+            <form asp-action="AddCategory" method="post">
+                <input type="hidden" asp-for="NewCategory.EventID" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewCategory.CategoryName" class="form-label"></label>
+                        <input asp-for="NewCategory.CategoryName" class="form-control" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="NewCategory.DistanceKM" class="form-label"></label>
+                        <input asp-for="NewCategory.DistanceKM" type="number" step="0.1" min="0.1" class="form-control" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label asp-for="NewCategory.EntryFee" class="form-label"></label>
+                        <input asp-for="NewCategory.EntryFee" type="number" step="0.01" min="0" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="NewCategory.AgeGroup" class="form-label"></label>
+                        <input asp-for="NewCategory.AgeGroup" class="form-control" placeholder="e.g. 18+" />
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label asp-for="NewCategory.Description" class="form-label"></label>
+                        <input asp-for="NewCategory.Description" class="form-control" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-accent">Add category</button>
+            </form>
+        </div>
+    </div>
+}

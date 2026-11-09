@@ -1,0 +1,17 @@
+﻿@model RaceDay.MVC.Models.EventFormVm
+@{
+    ViewData["Title"] = "New event";
+    ViewData["FormAction"] = "CreateEvent";
+    ViewData["ButtonText"] = "Create event";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="mb-4">New event</h1>
+        <partial name="_EventForm" model="Model" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

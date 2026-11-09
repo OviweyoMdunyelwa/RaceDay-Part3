@@ -1,0 +1,56 @@
+﻿@model List<RaceDay.MVC.Models.MyResultRowVm>
+@{
+    ViewData["Title"] = "My Results";
+}
+
+@functions {
+    static string Time(TimeSpan? t) => t.HasValue ? t.Value.ToString(@"hh\:mm\:ss") : "-";
+    static string Pos(int? p) => p.HasValue ? p.Value.ToString() : "-";
+    static string Badge(string status) => (status ?? "").ToLowerInvariant() switch
+    {
+        "finished" or "official" or "published" => "status-confirmed",
+        "dnf" or "dns" or "dq" or "disqualified" => "status-cancelled",
+        _ => "status-pending"
+    };
+}
+
+<h1 class="mb-3">My Results</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No results yet. Results appear here once an organiser has published them for an event you entered.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Finish time</th>
+                    <th>Overall position</th>
+                    <th>Category position</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model)
+                {
+                    <tr>
+                        <td>@row.Event?.EventName</td>
+                        <td>@(row.Event?.EventDate.ToString("dd MMM yyyy"))</td>
+                        <td>@row.Category?.CategoryName</td>
+                        <td>@Time(row.Result.FinishTime)</td>
+                        <td>@Pos(row.Result.PositionOverall)</td>
+                        <td>@Pos(row.Result.PositionCategory)</td>
+                        <td><span class="badge @Badge(row.Result.Status)">@row.Result.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

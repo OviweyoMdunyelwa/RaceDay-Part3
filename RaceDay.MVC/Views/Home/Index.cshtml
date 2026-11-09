@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    var name = Context.Session.GetString("DisplayName");
+    var role = Context.Session.GetString("Role");
+}
+
+<div class="text-center py-5">
+    <h1 class="display-4">RaceDay</h1>
+
+    @if (name == null)
+    {
+        <p class="lead">Please log in or register.</p>
+        <a asp-controller="Auth" asp-action="Login" class="btn btn-success">Login</a>
+        <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-success">Register</a>
+    }
+    else
+    {
+        <p class="lead">Welcome, @name. You are logged in as a <strong>@role</strong>.</p>
+        <form asp-controller="Auth" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-outline-danger">Logout</button>
+        </form>
+    }
+</div>

@@ -1,0 +1,86 @@
+﻿@{
+    var role = Context.Session.GetString("Role");
+    var userId = Context.Session.GetInt32("UserId");
+    var name = Context.Session.GetString("DisplayName");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RaceDay</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark raceday-nav">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">🏁 RaceDay</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        @if (userId == null)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                        }
+                        else if (role == "Organiser")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Organiser" asp-action="Index">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Organiser" asp-action="Events">Events</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Organiser" asp-action="Enrolments">Enrolments</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Organiser" asp-action="Results">Results</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Participant" asp-action="Index">Events</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Participant" asp-action="MyEvents">My Enrolments</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Participant" asp-action="MyResults">My Results</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Participant" asp-action="Profile">Profile</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav align-items-lg-center">
+                        @if (userId == null)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Login">Login</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-accent ms-lg-2" asp-controller="Auth" asp-action="Register">Register</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><span class="navbar-text me-3">@name (@role)</span></li>
+                            <li class="nav-item">
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="raceday-footer text-center py-3">
+        © 2026 RaceDay – Run. Walk. Cycle.
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

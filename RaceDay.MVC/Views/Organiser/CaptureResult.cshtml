@@ -1,0 +1,58 @@
+﻿@using RaceDay.MVC.Models
+@model RaceDay.MVC.Models.ResultFormVm
+@{
+    ViewData["Title"] = "Race result";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h1 class="mb-3">Race result</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div><strong>@Model.ParticipantName</strong> (race no. @Model.RaceNumber)</div>
+                <div class="text-muted">@Model.EventName · @Model.CategoryName</div>
+            </div>
+        </div>
+
+        <form asp-action="CaptureResult" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EnrolmentID" />
+            <input type="hidden" asp-for="ResultID" />
+
+            <div class="mb-3">
+                <label asp-for="FinishTimeText" class="form-label"></label>
+                <input asp-for="FinishTimeText" class="form-control" placeholder="01:25:30" />
+                <span asp-validation-for="FinishTimeText" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PositionOverall" class="form-label"></label>
+                    <input asp-for="PositionOverall" type="number" min="1" class="form-control" />
+                    <span asp-validation-for="PositionOverall" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PositionCategory" class="form-label"></label>
+                    <input asp-for="PositionCategory" type="number" min="1" class="form-control" />
+                    <span asp-validation-for="PositionCategory" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Visibility</label>
+                <select asp-for="Status" class="form-select">
+                    <option value="@ResultStatuses.Draft">Save as draft (participant cannot see it)</option>
+                    <option value="@ResultStatuses.Published">Publish (participant can see it)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-raceday">Save result</button>
+            <a asp-action="Results" class="btn btn-link">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

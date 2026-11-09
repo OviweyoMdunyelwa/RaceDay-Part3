@@ -1,0 +1,17 @@
+﻿@model RaceDay.MVC.Models.EventDto
+@using RaceDay.MVC.Services
+@{
+    var img = ImageUrl.Proxy(Model.BannerImageUrl);
+}
+@if (img != null)
+{
+    <div class="event-banner event-banner-img" style="background-image:url('@img')">
+        <span class="badge bg-light text-dark">@Model.EventType</span>
+    </div>
+}
+else
+{
+    <div class="event-banner event-@Model.EventType.ToLower()">
+        <span class="badge bg-light text-dark">@Model.EventType</span>
+    </div>
+}

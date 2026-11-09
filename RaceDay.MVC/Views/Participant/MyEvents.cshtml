@@ -1,0 +1,63 @@
+﻿@model List<RaceDay.MVC.Models.EnrolmentRowVm>
+@{
+    ViewData["Title"] = "My Enrolments";
+}
+
+@functions {
+    static string Badge(string? status) => (status ?? "").ToLowerInvariant() switch
+    {
+        "paid" or "confirmed" => "status-confirmed",
+        "pending" => "status-pending",
+        _ => "status-cancelled"
+    };
+}
+
+<h1 class="mb-3">My Enrolments</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You have not entered any events yet.
+        <a asp-action="Index">Browse upcoming events</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th>Race no.</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model)
+                {
+                    <tr>
+                        <td>@row.Enrolment.RaceNumber</td>
+                        <td>
+                            @if (row.Event != null)
+                            {
+                                <a asp-action="Details" asp-route-id="@row.Event.EventID">@row.Event.EventName</a>
+                            }
+                        </td>
+                        <td>@(row.Event?.EventDate.ToString("dd MMM yyyy"))</td>
+                        <td>@row.Category?.CategoryName</td>
+                        <td><span class="badge @Badge(row.Enrolment.PaymentStatus)">@row.Enrolment.PaymentStatus</span></td>
+                        <td class="text-end">
+                            <form asp-action="CancelEnrolment" asp-route-id="@row.Enrolment.EnrolmentID" method="post"
+                                  onsubmit="return confirm('Cancel this enrolment?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

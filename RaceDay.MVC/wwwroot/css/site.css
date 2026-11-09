@@ -1,0 +1,99 @@
+:root {
+    --rd-primary: #0b3d2e;
+    --rd-accent: #ff6b1a;
+    --rd-light: #f4f7f5;
+}
+
+body {
+    background: var(--rd-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.raceday-nav {
+    background: var(--rd-primary);
+}
+
+    .raceday-nav .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+.btn-raceday, .btn-success {
+    background: var(--rd-primary);
+    border-color: var(--rd-primary);
+    color: #fff;
+}
+
+    .btn-raceday:hover, .btn-success:hover {
+        background: #082b20;
+        border-color: #082b20;
+        color: #fff;
+    }
+
+.btn-accent {
+    background: var(--rd-accent);
+    border-color: var(--rd-accent);
+    color: #fff;
+}
+
+    .btn-accent:hover {
+        background: #e55a0c;
+        border-color: #e55a0c;
+        color: #fff;
+    }
+
+.raceday-footer {
+    background: var(--rd-primary);
+    color: #cfe3da;
+}
+
+.card {
+    border: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Enrolment status colours */
+.status-confirmed {
+    background: #198754;
+    color: #fff;
+}
+
+.status-pending {
+    background: #ffc107;
+    color: #222;
+}
+
+.status-cancelled {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* Event cards (gradients now; real banner images come with Azure) */
+.event-banner {
+    height: 140px;
+    padding: 12px;
+    background: linear-gradient(135deg, #0b3d2e, #1f7a5a);
+    border-radius: .375rem .375rem 0 0;
+}
+
+.event-run {
+    background: linear-gradient(135deg, #0b3d2e, #1f7a5a);
+}
+
+.event-walk {
+    background: linear-gradient(135deg, #1d4e89, #4a90d9);
+}
+
+.event-cycle {
+    background: linear-gradient(135deg, #b8470a, #ff6b1a);
+}
+.event-banner-img {
+    background-size: cover;
+    background-position: center;
+}

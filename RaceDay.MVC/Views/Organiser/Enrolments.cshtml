@@ -1,0 +1,70 @@
+﻿@model RaceDay.MVC.Models.EnrolmentsPageVm
+@{
+    ViewData["Title"] = "Enrolments";
+}
+
+@functions {
+    static string Badge(string? s) => (s ?? "").ToLowerInvariant() switch
+    {
+        "paid" or "confirmed" => "status-confirmed",
+        "pending" => "status-pending",
+        _ => "status-cancelled"
+    };
+}
+
+<h1 class="mb-3">Enrolments</h1>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <select name="eventId" class="form-select" onchange="this.form.submit()">
+            <option value="">All my events</option>
+            @foreach (var e in Model.Events)
+            {
+                <option value="@e.EventID" selected="@(Model.SelectedEventId == e.EventID)">@e.EventName</option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (!Model.Enrolments.Any())
+{
+    <div class="alert alert-info">No participants have entered yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th>Race no.</th>
+                    <th>Participant</th>
+                    <th>Event</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Enrolments)
+                {
+                    <tr>
+                        <td>@e.RaceNumber</td>
+                        <td>
+                            <strong>@e.ParticipantName</strong><br />
+                            <small class="text-muted">@e.ParticipantEmail @(string.IsNullOrWhiteSpace(e.ParticipantPhone) ? "" : "· " + e.ParticipantPhone)</small>
+                        </td>
+                        <td>@e.EventName</td>
+                        <td>@e.CategoryName</td>
+                        <td><span class="badge @Badge(e.PaymentStatus)">@e.PaymentStatus</span></td>
+                        <td>
+                            <a asp-action="CaptureResult" asp-route-enrolmentId="@e.EnrolmentID"
+                               class="btn btn-sm @(e.ResultID.HasValue ? "btn-outline-secondary" : "btn-accent")">
+                                @(e.ResultID.HasValue ? "Edit result" : "Enter result")
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

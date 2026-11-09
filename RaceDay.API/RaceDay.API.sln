@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37531.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.API", "RaceDay.API.csproj", "{811AE6E0-4F17-45A8-888B-3F6B75CB18D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		RaceDayDbContext.cs = RaceDayDbContext.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{65085390-21EC-4010-8E7B-E73DD01897F8}"
+	ProjectSection(SolutionItems) = preProject
+		Category.cs = Category.cs
+		Enrolment.cs = Enrolment.cs
+		Event.cs = Event.cs
+		RaceDayUser.cs = RaceDayUser.cs
+		Result.cs = Result.cs
+		Route.cs = Route.cs
+		Weather.cs = Weather.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DTOs", "DTOs", "{8395D1EF-FF52-47E7-9BA8-E490C66607B3}"
+	ProjectSection(SolutionItems) = preProject
+		LoginRequest.cs = LoginRequest.cs
+		RegisterRequest.cs = RegisterRequest.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.MVC", "..\RaceDay.MVC\RaceDay.MVC.csproj", "{37F57484-3D38-4F5F-9413-83EAF80E09E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{811AE6E0-4F17-45A8-888B-3F6B75CB18D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811AE6E0-4F17-45A8-888B-3F6B75CB18D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811AE6E0-4F17-45A8-888B-3F6B75CB18D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811AE6E0-4F17-45A8-888B-3F6B75CB18D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37F57484-3D38-4F5F-9413-83EAF80E09E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F57484-3D38-4F5F-9413-83EAF80E09E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F57484-3D38-4F5F-9413-83EAF80E09E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F57484-3D38-4F5F-9413-83EAF80E09E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FA6183D-061F-44EC-940E-651CDF3DD504}
+	EndGlobalSection
+EndGlobal
